@@ -27,3 +27,28 @@ function closeConnect($connection)
     {
         mysqli_close($connection);
     }
+
+// This function is used for all MySQL queries to the database.
+function queryDB($connection, $query)
+    {
+        $result = mysqli_query($connection, $query) or die("Query failed");
+        return $result;
+
+/* This function authenticates the user against the User table in the database. If successful, redirects to main page.
+   If failure, a pop-up informs user of the failure. */
+function authenticateUser($connection, $username, $password)
+    {
+        $sql = "SELECT * FROM Users WHERE username = '$username' AND password = '$password'";
+        $result = queryDB($connection, $sql);
+        if ($result)
+        {
+            // redirect to the MainLanding.html page
+            header("Location: MainLanding.html");
+            die(); // this is necessary to prevent the script from continuing to execute after the redirect
+        }
+        else
+        {
+            // create a pop-up window that says "Invalid username or password"
+            echo "<script type='text/javascript'>alert('Invalid username or password');</script>";
+        }
+    }
