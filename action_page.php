@@ -3,13 +3,15 @@
 <?php
 require_once 'db_connection.php';
 
-// assign the username and password posted from Loginlanding.html to a variable
-$username = $_POST['username'];
-$password = $_POST['password'];
+$username = $_POST['uname'];
+$password = $_POST['psw'];
 
-// connect to the database
-$conn = openConnect();
+$sql = "SELECT * FROM USERS WHERE UNAME = '$username' AND PWORD = '$password'";
+$result = $conn->query($sql);
 
-/* call the authenticateUser function from db_connection.php. */
-authenticateUser($conn, $username, $password);
-
+if ($result->num_rows > 0) {
+    echo "Login successful. Welcome, " . htmlspecialchars($username) . "!";
+} else {
+    echo "Login failed. Please check your username and password.";
+}
+?>
