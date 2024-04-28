@@ -2,9 +2,157 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Outfit Generator</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #outfitDisplay {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+    </style>
 </head>
 <body>
+    <h1>Outfit Generator</h1>
+    
+    <div class="item">
+        <input type="checkbox" id="top" checked>
+        <label for="top">Top</label>
+        <button id="generateTop">Generate Top</button>
+    </div>
+    
+    <div class="item">
+        <input type="checkbox" id="bottom" checked>
+        <label for="bottom">Bottom</label>
+        <button id="generateBottom">Generate Bottom</button>
+    </div>
+    
+    <div class="item">
+        <input type="checkbox" id="shoes" checked>
+        <label for="shoes">Shoes</label>
+        <button id="generateShoes">Generate Shoes</button>
+    </div>
+    
+    <div class="item">
+        <input type="checkbox" id="accessory1">
+        <label for="accessory1">Accessory 1</label>
+        <button id="generateAccessory1">Generate Accessory 1</button>
+    </div>
+    
+    <div class="item">
+        <input type="checkbox" id="accessory2">
+        <label for="accessory2">Accessory 2</label>
+        <button id="generateAccessory2">Generate Accessory 2</button>
+    </div>
+    
+    <button id="generateButton">Generate Outfit!</button>
+    <button id="saveButton">Save Outfit</button>
+    
+    <div id="outfitDisplay"></div>
+    
+    <script>
+        function generateItem(itemType) {
+            let items = {
+                'top': ['T-shirt', 'Blouse', 'Sweater'],
+                'bottom': ['Jeans', 'Skirt', 'Trousers'],
+                'shoes': ['Sneakers', 'Boots', 'Sandals'],
+                'accessory1': ['Necklace', 'Hat', 'Watch'],
+                'accessory2': ['Bracelet', 'Scarf', 'Belt']
+            };
+            let randomItem = items[itemType][Math.floor(Math.random() * items[itemType].length)];
+            return randomItem;
+        }
 
+        document.getElementById('generateTop').addEventListener('click', function() {
+            document.getElementById('outfitDisplay').innerText = 'Top: ' + generateItem('top');
+        });
+
+        document.getElementById('generateBottom').addEventListener('click', function() {
+            document.getElementById('outfitDisplay').innerText = 'Bottom: ' + generateItem('bottom');
+        });
+
+        document.getElementById('generateShoes').addEventListener('click', function() {
+            document.getElementById('outfitDisplay').innerText = 'Shoes: ' + generateItem('shoes');
+        });
+
+        document.getElementById('generateAccessory1').addEventListener('click', function() {
+            document.getElementById('outfitDisplay').innerText = 'Accessory 1: ' + generateItem('accessory1');
+        });
+
+        document.getElementById('generateAccessory2').addEventListener('click', function() {
+            document.getElementById('outfitDisplay').innerText = 'Accessory 2: ' + generateItem('accessory2');
+        });
+
+        document.getElementById('generateButton').addEventListener('click', function() {
+            let selectedItems = [];
+            if (document.getElementById('top').checked) {
+                selectedItems.push('Top: ' + generateItem('top'));
+            }
+            if (document.getElementById('generateButton').addEventListener('click', function() {
+            let selectedItems = [];
+            if (document.getElementById('top').checked) {
+                selectedItems.push('Top: ' + generateItem('top'));
+            }
+            if (document.getElementById('bottom').checked) {
+                selectedItems.push('Bottom: ' + generateItem('bottom'));
+            }
+            if (document.getElementById('shoes').checked) {
+                selectedItems.push('Shoes: ' + generateItem('shoes'));
+            }
+            if (document.getElementById('accessory1').checked) {
+                selectedItems.push('Accessory 1: ' + generateItem('accessory1'));
+            }
+            if (document.getElementById('accessory2').checked) {
+                selectedItems.push('Accessory 2: ' + generateItem('accessory2'));
+            }
+            
+            if (selectedItems.length > 0) {
+                document.getElementById('outfitDisplay').innerText = selectedItems.join('\n');
+            } else {
+                document.getElementById('outfitDisplay').innerText = 'Please select at least one item to generate an outfit.';
+            }
+        });
+
+        document.getElementById('saveButton').addEventListener('click', function() {
+            let outfit = {
+                top: document.getElementById('top').checked,
+                bottom: document.getElementById('bottom').checked,
+                shoes: document.getElementById('shoes').checked,
+                accessories: [
+                    document.getElementById('accessory1').checked,
+                    document.getElementById('accessory2').checked
+                ]
+            };
+            console.log(outfit);
+            // Add code here to save the outfit data
+        });
+    </script>
 </body>
 </html>
