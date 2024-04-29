@@ -6,12 +6,26 @@ require_once 'db_connection.php';
 $username = $_POST['uname'];
 $password = $_POST['psw'];
 
+$conn = openConnect();
+
 $sql = "SELECT * FROM USERS WHERE UNAME = '$username' AND PWORD = '$password'";
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    echo "Login successful. Welcome, " . htmlspecialchars($username) . "!";
-} else {
-    echo "Login failed. Please check your username and password.";
-}
-?>
+if (authenticateUser($conn, $username, $password))
+    {
+        // redirect to the MainLanding.html page
+        closeConnect($conn);
+        header("Location: easyStyleMain.html");
+        exit();
+    }
+    // else if the query returns empty, the username and password are invalid
+        else
+    {
+        // pop-up informing user of invalid username and password
+        closeConnect($conn);
+        $_SESSION['error'] = "Invalid username or password";
+        header("Location: easyStyleLogin.html");
+        exit;
+    }
+die();
+

@@ -44,30 +44,16 @@
 
 <body>
     <div class="container">
-        <form id="loginForm">
+        <form id="loginForm" action="action_page.php" method="post">
             <label for="uname"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="uname" required>
             <br>
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" required>
             <br>
-            <button type="button" onclick="login()">Login</button>
+            <button type="submit">Login</button>
         </form>
         <div id="loginMessage"></div>
     </div>
-
-    <script>
-        function login() {
-            var username = document.getElementsByName("uname")[0].value;
-            var password = document.getElementsByName("psw")[0].value;
-            
-            // Simulate login validation
-            if (username === "user" && password === "pass") { // Replace with actual validation logic
-                document.getElementById("loginMessage").innerHTML = "Login successful. Welcome, " + username + "!";
-            } else {
-                document.getElementById("loginMessage").innerHTML = "Login failed. Please check your username and password.";
-            }
-        }
-    </script>
 </body>
 </html>
