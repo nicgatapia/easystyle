@@ -1,6 +1,8 @@
 <?php
-require_once 'db_connection.php';
+error_reporting(E_ALL);
+ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
+require_once 'db_connection.php';
 if (isset($_FILES['image'])) {
     $fileName = $_FILES['image']['name'];
     $fileType = $_FILES['image']['type'];
@@ -38,7 +40,6 @@ if (isset($_FILES['image'])) {
 }
 // Get other form data
 $clothingType = $_POST['clothing_type'];
-
 // Database connection and SQL query to insert clothing item
 $conn = openConnect();
 
@@ -46,73 +47,45 @@ $conn = openConnect();
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// SQL query to insert clothing item details into the respective table based on clothing type
 if ($clothingType === 'top') {
     $sql = "INSERT INTO ITEM (iid, available, attire, color, istop, isbot, isshoes, isacc) VALUES ('$itemId', 1, ?, ?, 1, 0, 0, 0)";
     $sqlTop = "INSERT INTO TOP (iid, type, material, pattern, isdress) VALUES ('$itemId', ?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sqlTop);
+    $stmt->bind_param("ssss", $_POST['type'], $_POST['top_material'], $_POST['top_pattern'], isset($_POST['top_isdress']) ? '1' : '0');
 } elseif ($clothingType === 'bottom') {
     $sql = "INSERT INTO ITEM (iid, available, attire, color, istop, isbot, isshoes, isacc) VALUES ('$itemId', 1, ?, ?, 0, 1, 0, 0)";
     $sqlBottom = "INSERT INTO BOTTOM (iid, type) VALUES ('$itemId', ?)";
+
+    $stmt = $conn->prepare($sqlBottom);
+    $stmt->bind_param("s", $_POST['bottom_type']);
 } elseif ($clothingType === 'shoe') {
     $sql = "INSERT INTO ITEM (iid, available, attire, color, istop, isbot, isshoes, isacc) VALUES ('$itemId', 1, ?, ?, 0, 0, 1, 0)";
     $sqlShoe = "INSERT INTO SHOES (iid, type, brand) VALUES ('$itemId', ?, ?)";
+
+    $stmt = $conn->prepare($sqlShoe);
+    $stmt->bind_param("ss", $_POST['shoe_type'], $_POST['shoe_brand']);
 } elseif ($clothingType === 'accessory') {
     $sql = "INSERT INTO ITEM (iid, available, attire, color, istop, isbot, isshoes, isacc) VALUES ('$itemId', 1, ?, ?, 1, 0, 0, 1)";
     $sqlAccessory = "INSERT INTO ACCESSORY (iid, type, brand) VALUES ('$itemId', ?, ?)";
-}
-// SQL query to insert clothing item details into the respective table based on clothing type
-if ($clothingType === 'top') {
-    $conn->begin_transaction(); // Start a transaction
 
-    $stmtTop = $conn->prepare($sqlTop);
-    $stmtTop->bind_param("ssss", $_POST['type'], $_POST['top_material'], $_POST['top_pattern'], isset($_POST['top_isdress']) ? '1' : '0');
-    $stmtTop->execute();
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $_POST['type'], $_POST['top_material']);
-    $stmt->execute();
-
-    $conn->commit(); // Commit the transaction
-} elseif ($clothingType === 'bottom') {
-    $conn->begin_transaction(); // Start a transaction
-
-    $stmtBottom = $conn->prepare($sqlBottom);
-    $stmtBottom->bind_param("s", $_POST['bottom_type']);
-    $stmtBottom->execute();
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $_POST['bottom_type']);
-    $stmt->execute();
-
-    $conn->commit(); // Commit the transaction
-} elseif ($clothingType === 'shoe') {
-    $conn->begin_transaction(); // Start a transaction
-
-    $stmtShoe = $conn->prepare($sqlShoe);
-    $stmtShoe->bind_param("ss", $_POST['shoe_type'], $_POST['shoe_brand']);
-    $stmtShoe->execute();
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $_POST['shoe_type'], $_POST['shoe_brand']);
-    $stmt->execute();
-
-    $conn->commit(); // Commit the transaction
-} elseif ($clothingType === 'accessory') {
-    $conn->begin_transaction(); // Start a transaction
-
-    $stmtAccessory = $conn->prepare($sqlAccessory);
-    $stmtAccessory->bind_param("ss", $_POST['accessory_type'], $_POST['accessory_brand']);
-    $stmtAccessory->execute();
-
-    $stmt = $conn->prepare($sql);
+    $stmt = $conn->prepare($sqlAccessory);
     $stmt->bind_param("ss", $_POST['accessory_type'], $_POST['accessory_brand']);
-    $stmt->execute();
-
-    $conn->commit(); // Commit the transaction
 }
+
+    if ($stmt->execute()) {
+        echo "Clothing item added successfully!";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
 
     $stmt->close();
+else {
+    echo "Error in preparing the statement.";
+}
 
-$conn->close();
 function generateItemId() {
     $conn = openConnect();
     
@@ -126,4 +99,6 @@ function generateItemId() {
 
     return $randomId;
 }
+
+$conn->close();
 ?>

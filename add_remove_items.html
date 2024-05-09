@@ -5,7 +5,7 @@
     <title>Add Clothing Items</title>
     <style>
         body {
-            font-family: Helvetica, Arial, sans-serif;
+            font-family: "Futura", "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -14,7 +14,7 @@
         h1 {
             text-align: center;
             color: #333;
-			font-family: Helvetica, Arial, sans-serif;
+            font-family: "Futura", "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
         }
         form {
             width: 50%;
@@ -49,24 +49,81 @@
         }
         label {
             display: inline-block;
-            margin-right: 10px;
-			font-family: Helvetica, Arial, sans-serif;
+            margin-right: 15px;
+            font-family: "Futura", "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
         }
     </style>
 </head>
 <body>
     <h1>Add Clothing Item</h1>
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*" required>
+    <form action="" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*">
         <br>
-        <label><input type="radio" id="top" name="clothing_type" value="top">Top</label>
-        <label><input type="radio" id="bottom" name="clothing_type" value="bottom">Bottom</label>
-        <label><input type="radio" id="shoe" name="clothing_type" value="shoe">Shoe</label>
-        <label><input type="radio" id="accessory" name="clothing_type" value="accessory">Accessory</label>
-        <label><input type="radio" id="misc" name="clothing_type" value="misc">
-        Miscellaneous</label>
+        <label><input type="radio" name="clothing_type" value="top" onclick="showFields('top')">Top</label>
+        <label><input type="radio" name="clothing_type" value="bottom" onclick="showFields('bottom')">Bottom</label>
+        <label><input type="radio" name="clothing_type" value="shoe" onclick="showFields('shoe')">Shoe</label>
+        <label><input type="radio" name="clothing_type" value="accessory" onclick="showFields('accessory')">Accessory</label>
+        <br>
+        <div id="topFields" style="display: none">
+            Type: <input type="text" name="top_type"><br>
+            Material: <input type="text" name="top_material"><br>
+            Pattern: <input type="text" name="top_pattern"><br>
+            Is Dress: <input type="checkbox" name="top_isdress"><br>
+        </div>
+        <div id="bottomFields" style="display: none">
+            Type: <input type="text" name="bottom_type"><br>
+        </div>
+        <div id="shoeFields" style="display: none">
+            Type: <input type="text" name="shoe_type"><br>
+            Brand: <input type="text" name="shoe_brand"><br>
+        </div>
+        <div id="accessoryFields" style="display: none">
+            Type: <input type="text" name="accessory_type"><br>
+            Brand: <input type="text" name="accessory_brand"><br>
+        </div>
+        <div id="formalityButtons">
+            <label><input type="radio" name="formality" value="casual">Casual</label>
+            <label><input type="radio" name="formality" value="business_casual">Business Casual</label>
+            <label><input type="radio" name="formality" value="formal">Formal</label>
+        </div>
+        
+        <div class="color-selection">
+            <label for="color">Color:</label>
+            <select id="color" name="color">
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="yellow">Yellow</option>
+                <option value="orange">Orange</option>
+                <option value="purple">Purple</option>
+                <option value="pink">Pink</option>
+                <option value="brown">Brown</option>
+                <option value="black">Black</option>
+                <!-- Add more color options as needed -->
+            </select>
+        </div>
+
         <button type="submit">Add Item</button>
-        <h3>Description:</h3><input type="text" name="description">
     </form>
+
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        echo "Item successfully added";
+    }
+    ?>
+    <script>
+        function showFields(type) {
+            // Hide all fields first
+            document.getElementById('topFields').style.display = 'none';
+            document.getElementById('bottomFields').style.display = 'none';
+            document.getElementById('shoeFields').style.display = 'none';
+            document.getElementById('accessoryFields').style.display = 'none';
+
+            // Show fields based on selected radio button
+            document.getElementById(type + 'Fields').style.display = 'block';
+        }
+    </script>
+
 </body>
+</html>
 </html>
